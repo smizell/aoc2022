@@ -6,11 +6,11 @@ def part1(inputs)
 end
 
 def part2(inputs)
-  calorie_sums(inputs).sort.reverse!.take(3).reduce(&:+)
+  calorie_sums(inputs).sort.reverse!.take(3).sum
 end
 
 def calorie_sums(inputs)
   inputs.split("\n\n").map do |elf_calories|
-    elf_calories.split("\n").map(&:to_i).reduce(&:+)
+    elf_calories.split("\n").map(&:to_i).sum
   end
 end
