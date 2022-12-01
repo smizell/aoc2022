@@ -10,9 +10,7 @@ def part2(inputs)
 end
 
 def calorie_sums(inputs)
-  elf_calories = inputs.split("\n\n")
-
-  elf_calories.map do |calories|
-    calories.split("\n").map(&:to_i).reduce(&:+)
+  inputs.split("\n\n").map do |elf_calories|
+    elf_calories.split("\n").map(&:to_i).reduce(&:+)
   end
 end
