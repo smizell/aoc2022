@@ -1,0 +1,76 @@
+#!/usr/bin/env ruby
+
+require 'fileutils'
+require "pry"
+require "thor"
+
+class AdventOfCodeCli < Thor
+  desc "example DAY PART", "run solution with example data"
+  def example(day, part)
+    puts CodeRunner.example(day, part)
+  end
+
+  desc "solve DAY PART", "run solution with input data"
+  def solve(day, part)
+    puts CodeRunner.solve(day, part)
+  end
+
+  desc "next_day DAY", "set up files for next day"
+  def next_day(day)
+    CodeRunner.next_day(day)
+  end
+end
+
+class CodeRunner
+  attr_reader :day_num
+
+  def initialize(day_value, part)
+    @day = Day.new(day_value)
+    @part = part
+  end
+
+  def self.next_day(day_value)
+    day = Day.new(day)
+    day_id = "day#{day.num}"
+    Dir.mkdir("./inputs/#{day_id}/")
+    FileUtils.touch("./inputs/#{day_id}/input.txt")
+    FileUtils.touch("./inputs/#{day_id}/example.txt")
+    FileUtils.touch("./lib/#{day_id}.rb")
+  end
+
+  def self.example(day, part)
+    new(day, part).call("example.txt")
+  end
+
+  def self.solve(day, part)
+    new(day, part).call("input.txt")
+  end
+
+  def call(data_file_name)
+    load_code
+    example_data = File.read("./inputs/day#{@day.num}/#{data_file_name}")
+    class_name = "Day#{@day.num}"
+    day_class = Object.const_get(class_name)
+    method_name = "part#{@part}"
+    day_class.new.send(method_name, example_data)
+  end
+
+  private
+
+  def load_code
+    file_name = "./lib/day#{@day.num}.rb"
+    require file_name
+  end
+end
+
+class Day
+  def initialize(day)
+    @day = day
+  end
+
+  def num
+    @day.rjust(2, "0")
+  end
+end
+
+AdventOfCodeCli.start(ARGV)
