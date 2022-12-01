@@ -22,7 +22,8 @@ class AdventOfCodeCli < Thor
 end
 
 class CodeRunner
-  attr_reader :day_num
+  EXAMPLE_FILE_NAME = "example.txt"
+  INPUT_FILE_NAME = "input.txt"
 
   def initialize(day_value, part)
     @day = Day.new(day_value)
@@ -30,29 +31,29 @@ class CodeRunner
   end
 
   def self.next_day(day_value)
-    day = Day.new(day)
+    day = Day.new(day_value)
     day_id = "day#{day.num}"
     Dir.mkdir("./inputs/#{day_id}/")
-    FileUtils.touch("./inputs/#{day_id}/input.txt")
-    FileUtils.touch("./inputs/#{day_id}/example.txt")
+    FileUtils.touch("./inputs/#{day_id}/#{EXAMPLE_FILE_NAME}")
+    FileUtils.touch("./inputs/#{day_id}/#{INPUT_FILE_NAME}")
     FileUtils.touch("./lib/#{day_id}.rb")
   end
 
   def self.example(day, part)
-    new(day, part).call("example.txt")
+    new(day, part).call(EXAMPLE_FILE_NAME)
   end
 
   def self.solve(day, part)
-    new(day, part).call("input.txt")
+    new(day, part).call(INPUT_FILE_NAME)
   end
 
   def call(data_file_name)
     load_code
-    example_data = File.read("./inputs/day#{@day.num}/#{data_file_name}")
+    data = File.read("./inputs/day#{@day.num}/#{data_file_name}")
     class_name = "Day#{@day.num}"
     day_class = Object.const_get(class_name)
     method_name = "part#{@part}"
-    day_class.new.send(method_name, example_data)
+    day_class.new.send(method_name, data)
   end
 
   private
