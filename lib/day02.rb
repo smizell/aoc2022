@@ -66,7 +66,7 @@ class Game
 
   class << self
     def play_all(rounds)
-      rounds.map { |my_move, opponent_move| play(my_move, opponent_move) }
+      rounds.map { |round| play(*round) }
     end
 
     def play(my_move, opponent_move)
