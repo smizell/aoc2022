@@ -22,6 +22,10 @@ class Day02
     Game.play_all(rounds).map(&:score).sum
   end
 
+  def example_part1
+    15
+  end
+
   def part2(inputs)
     rounds = parse_inputs(inputs).map do |opponent_move_code, game_result|
       opponent_move = MOVE_MAP[opponent_move_code]
@@ -40,6 +44,10 @@ class Day02
     end
 
     Game.play_all(rounds).map(&:score).sum
+  end
+
+  def example_part2
+    12
   end
 
   def parse_inputs(inputs)

@@ -7,7 +7,17 @@ require "thor"
 class AdventOfCodeCli < Thor
   desc "example DAY PART", "run solution with example data"
   def example(day, part)
-    puts CodeRunner.example(day, part)
+    result, matches_example = CodeRunner.example(day, part)
+
+    puts "Result: #{result}"
+
+    unless matches_example.nil?
+      if result == matches_example
+        puts "Matches expected value!"
+      else
+        puts "Incorrect: expected #{matches_example} for the result"
+      end
+    end
   end
 
   desc "solve DAY PART", "run solution with input data"
@@ -22,8 +32,8 @@ class AdventOfCodeCli < Thor
 end
 
 class CodeRunner
-  EXAMPLE_FILE_NAME = "example.txt"
-  INPUT_FILE_NAME = "input.txt"
+  EXAMPLE_FILE_NAME = "example"
+  INPUT_FILE_NAME = "input"
 
   def initialize(day_value, part)
     @day = Day.new(day_value)
@@ -49,17 +59,20 @@ class CodeRunner
 
   def call(data_file_name)
     load_code
-    data = File.read("./inputs/day#{@day.num}/#{data_file_name}")
+    data = File.read("./inputs/day#{@day.num}/#{data_file_name}.txt")
     class_name = "Day#{@day.num}"
     day_class = Object.const_get(class_name)
     method_name = "part#{@part}"
-    day_class.new.send(method_name, data)
+    day_code = day_class.new
+    result = day_code.send(method_name, data)
+    matches_example = day_code.send("#{data_file_name}_#{method_name}") rescue nil
+    return result, matches_example
   end
 
   private
 
   def load_code
-    file_name = "./lib/day#{@day.num}.rb"
+    file_name = "./lib/day#{@day.num}"
     require file_name
   end
 end
