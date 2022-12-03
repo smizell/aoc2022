@@ -1,8 +1,9 @@
 class Day03
   def part1(inputs)
-    inputs.split("\n").map do |line|
-      line.chars.each_slice(line.size / 2).to_a.map(&:join)
-    end.map(&method(:priorities)).sum
+    inputs.split("\n")
+      .map { |line| line.chars.each_slice(line.size / 2).map(&:join) }
+      .map(&method(:priorities))
+      .sum
   end
 
   def example_part1
@@ -10,7 +11,10 @@ class Day03
   end
 
   def part2(inputs)
-    inputs.split("\n").each_slice(3).map(&method(:priorities)).sum
+    inputs.split("\n")
+      .each_slice(3)
+      .map(&method(:priorities))
+      .sum
   end
 
   def example_part2
