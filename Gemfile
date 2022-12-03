@@ -1,3 +1,4 @@
-source 'https://rubygems.org'
+source "https://rubygems.org"
 gem "pry"
+gem "standard"
 gem "thor"

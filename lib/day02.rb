@@ -5,7 +5,7 @@ class Day02
     "C" => :scissors,
     "X" => :rock,
     "Y" => :paper,
-    "Z" => :scissors,
+    "Z" => :scissors
   }
 
   RESULT_MAP = {
@@ -78,7 +78,7 @@ class Game
     end
 
     def play(my_move, opponent_move)
-      if (my_move == opponent_move)
+      if my_move == opponent_move
         draw(my_move)
       elsif WINNING_MOVES[my_move] == opponent_move
         won(my_move)
