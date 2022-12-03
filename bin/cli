@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-require 'fileutils'
+require "fileutils"
 require "pry"
 require "thor"
 
@@ -44,8 +44,8 @@ class CodeRunner
     day = Day.new(day_value)
     day_id = "day#{day.num}"
     Dir.mkdir("./inputs/#{day_id}/")
-    FileUtils.touch("./inputs/#{day_id}/#{EXAMPLE_FILE_NAME}")
-    FileUtils.touch("./inputs/#{day_id}/#{INPUT_FILE_NAME}")
+    FileUtils.touch("./inputs/#{day_id}/#{EXAMPLE_FILE_NAME}.txt")
+    FileUtils.touch("./inputs/#{day_id}/#{INPUT_FILE_NAME}.txt")
     FileUtils.touch("./lib/#{day_id}.rb")
   end
 
@@ -65,8 +65,12 @@ class CodeRunner
     method_name = "part#{@part}"
     day_code = day_class.new
     result = day_code.send(method_name, data)
-    matches_example = day_code.send("#{data_file_name}_#{method_name}") rescue nil
-    return result, matches_example
+    matches_example = begin
+      day_code.send("#{data_file_name}_#{method_name}")
+    rescue
+      nil
+    end
+    [result, matches_example]
   end
 
   private
