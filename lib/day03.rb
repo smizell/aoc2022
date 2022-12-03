@@ -1,7 +1,7 @@
 class Day03
   def part1(inputs)
     inputs.split("\n").map do |line|
-      line.each_slice(2).to_a
+      line.each_slice(2)
     end.map(&method(:priorities)).sum
   end
 
