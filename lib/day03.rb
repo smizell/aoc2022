@@ -1,7 +1,8 @@
 class Day03
   def part1(inputs)
-    inputs.split("\n")
-      .map { |line| line.chars.each_slice(line.size / 2).map(&:join) }
+    inputs
+      .split("\n")
+      .map(&method(:split_in_half))
       .map(&method(:priorities))
       .sum
   end
@@ -11,7 +12,8 @@ class Day03
   end
 
   def part2(inputs)
-    inputs.split("\n")
+    inputs
+      .split("\n")
       .each_slice(3)
       .map(&method(:priorities))
       .sum
@@ -22,6 +24,10 @@ class Day03
   end
 
   private
+
+  def split_in_half(value)
+    value.chars.each_slice(value.size / 2).map(&:join)
+  end
 
   def priorities(items)
     item_type = items.map(&:chars).reduce(&:&)[0]
