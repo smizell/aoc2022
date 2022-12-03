@@ -1,34 +1,35 @@
-require "set"
-
 class Day03
   def part1(inputs)
-    rucksacks = inputs.split("\n").map do |line|
-      [line[0, line.size / 2], line[line.size / 2..]]
-    end
-
-    priorities = rucksacks.map do |compartment1, compartment2|
-      compartment1_set = compartment1.chars.to_set
-      compartment2_set = compartment2.chars.to_set
-      item_type = compartment1_set.intersection(compartment2_set).to_a[0]
-
-      if upper?(item_type)
-        item_type.downcase.bytes[0] - 70
-      else
-        item_type.bytes[0] - 96
-      end
-    end
-
-    priorities.sum
+    inputs.split("\n").map do |line|
+      line.each_slice(2).to_a
+    end.map(&method(:priorities)).sum
   end
 
   def example_part1
     157
   end
 
-  def upper?(value)
-    value == value.upcase
+  def part2(inputs)
+    inputs.split("\n").each_slice(3).map(&method(:priorities)).sum
   end
 
-  def part2
+  def example_part2
+    70
+  end
+
+  private
+
+  def priorities(items)
+    item_type = items.map(&:chars).reduce(&:&)[0]
+
+    if upper?(item_type)
+      item_type.downcase.bytes[0] - 70
+    else
+      item_type.bytes[0] - 96
+    end
+  end
+
+  def upper?(value)
+    value == value.upcase
   end
 end
