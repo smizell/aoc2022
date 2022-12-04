@@ -22,7 +22,7 @@ class AdventOfCodeCli < Thor
 
   desc "solve DAY PART", "run solution with input data"
   def solve(day, part)
-    puts CodeRunner.solve(day, part)
+    puts CodeRunner.solve(day, part)[0]
   end
 
   desc "next_day DAY", "set up files for next day"
