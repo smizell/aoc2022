@@ -39,26 +39,19 @@ class Day05
   end
 
   def parse_stack_inputs(inputs)
-    rows = inputs.split("\n")
-
-    # We don't need the last row
-    rows.pop
+    (rows = inputs.split("\n")).pop
 
     stacks = []
 
-    rows.map do |row|
+    rows.map(&:chars).map do |row|
       stacks << (stack = [])
 
-      row_chars = row.chars
-
-      until row_chars.empty?
-        crate = row_chars.shift(3)[1]
+      until row.empty?
+        crate = row.shift(3)[1]
         stack << ((crate == " ") ? nil : crate)
 
         # Remove the padding between columns
-        if row_chars.count > 3
-          row_chars.shift
-        end
+        row.shift if row.count > 3
       end
     end
 
