@@ -43,7 +43,7 @@ class Day05
 
     stacks = []
 
-    rows.map(&:chars).map do |row|
+    rows.map(&:chars).each do |row|
       stacks << (stack = [])
 
       until row.empty?
