@@ -1,5 +1,3 @@
-require "set"
-
 class Day04
   def part1(inputs)
     sections(inputs).count do |elf1, elf2|
