@@ -1,8 +1,6 @@
 class Day04
   def part1(inputs)
-    sections(inputs).count do |elf1, elf2|
-      contains?(elf1, elf2)
-    end
+    sections(inputs).count(&method(:contains?))
   end
 
   def example_part1
@@ -10,9 +8,7 @@ class Day04
   end
 
   def part2(inputs)
-    sections(inputs).count do |elf1, elf2|
-      !(elf1 & elf2).empty?
-    end
+    sections(inputs).count(&method(:overlaps?))
   end
 
   def example_part2
@@ -30,7 +26,13 @@ class Day04
     end
   end
 
-  def contains?(a, b)
-    (a - b).empty? || (b - a).empty?
+  def contains?(elves)
+    elf1, elf2 = elves
+    (elf1 - elf2).empty? || (elf2 - elf1).empty?
+  end
+
+  def overlaps?(elves)
+    elf1, elf2 = elves
+    !(elf1 & elf2).empty?
   end
 end
