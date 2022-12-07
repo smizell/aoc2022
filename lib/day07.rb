@@ -1,6 +1,6 @@
 class Day07
   def part1(inputs)
-    filesystem = Compiler.new.compile(inputs)
+    filesystem = Compiler.compile(inputs)
 
     possible_dirs = filesystem.dir_sizes.filter do |dir_name, dir_size|
       dir_size <= 100000
@@ -14,7 +14,7 @@ class Day07
   end
 
   def part2(inputs)
-    filesystem = Compiler.new.compile(inputs)
+    filesystem = Compiler.compile(inputs)
     dir_sizes = filesystem.dir_sizes
     unused_space = 70000000 - dir_sizes["/"]
     space_needed = 30000000 - unused_space
@@ -32,6 +32,10 @@ class Compiler
   Token = Struct.new(:type, :value)
   Command = Struct.new(:name, :args, :outputs)
   Output = Struct.new(:line)
+
+  def self.compile(inputs)
+    new.compile(inputs)
+  end
 
   def compile(inputs)
     tokens = inputs.split("\n").map(&method(:tokenize))
@@ -122,16 +126,16 @@ class Filesystem
   end
 
   def ls(outputs = nil)
-    return cwd.contents if outputs.nil?
-
-    outputs.each do |output|
+    outputs&.each do |output|
       case output
       in ["dir", dir_path]
-        cwd.contents << dir(cwd, dir_path)
+        @cwd.contents << dir(@cwd, dir_path)
       in [file_size, file_name]
-        cwd.contents << File.new(file_name, file_size.to_i)
+        @cwd.contents << File.new(file_name, file_size.to_i)
       end
     end
+
+    @cwd.contents
   end
 
   def dir_sizes
@@ -141,9 +145,9 @@ class Filesystem
       dir_sizes[dir.full_path] ||= 0
 
       case item
-      when Filesystem::Directory
+      when Directory
         dir_sizes[dir.full_path] += dir_sizes[item.full_path]
-      when Filesystem::File
+      when File
         dir_sizes[dir.full_path] += item.size
       end
     end
